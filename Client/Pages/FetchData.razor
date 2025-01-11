@@ -1,0 +1,34 @@
+﻿@page "/fetchdata"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using testauthblazor.Client.Services
+@inject AzureDevOpsService DevOpsService
+@inject IAccessTokenProvider TokenProvider
+
+<h3>Azure DevOps Projects</h3>
+
+@if (projects == null)
+{
+    <p>Loading...</p>
+}
+else if (projects.Count == 0)
+{
+    <p>No projects found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var project in projects)
+        {
+            <li>@project</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<string> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await DevOpsService.GetProjectsAsync();
+    }
+}
